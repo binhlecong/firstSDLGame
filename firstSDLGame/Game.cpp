@@ -70,7 +70,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	Map::loadMap("Assets/map32_20_1.txt", 32, 20);
 
 	newPlayer.addComponent<TransformComponent>();
-	newPlayer.addComponent<SpriteComponent>("Assets/player_idle.png", 4, 100);
+	newPlayer.addComponent<SpriteComponent>("Assets/player_anims.png", true);
 	newPlayer.addComponent<KeyboardController>();
 	newPlayer.addComponent<ColliderComponent>("player");
 	newPlayer.addGroup(groupPlayers);
