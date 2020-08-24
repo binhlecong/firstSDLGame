@@ -34,18 +34,17 @@ public:
 		SDL_DestroyTexture(texture);
 	}
 
-	SpriteComponent(const char* path)
+	SpriteComponent(const char* path, SDL_Rect mSrcRect)
 	{
 		setTexture(path);
 
-		srcRect.x = srcRect.y = 0;
-		srcRect.w = srcRect.h = 0;
+		srcRect = mSrcRect;
 
 		desRect.x = desRect.y = 0;
 		desRect.w = desRect.h = 0;
 	}
 
-	SpriteComponent(const char* path, bool isAnimated)
+	SpriteComponent(const char* path, bool isAnimated, SDL_Rect mSrcRect)
 	{
 		animated = isAnimated;
 
@@ -57,8 +56,7 @@ public:
 		animations.emplace("Idle", idle);
 		animations.emplace("Walk", walk);
 
-		srcRect.x = srcRect.y = 0;
-		srcRect.w = srcRect.h = 0;
+		srcRect = mSrcRect;
 
 		desRect.x = desRect.y = 0;
 		desRect.w = desRect.h = 0;
@@ -75,7 +73,7 @@ public:
 	{
 		transform = &entity->getComponent<TransformComponent>();
 
-		srcRect.x = srcRect.y = 0;
+		// srcRect.x = srcRect.y = 0;
 		srcRect.w = transform->width;
 		srcRect.h = transform->height;
 	}
@@ -85,9 +83,8 @@ public:
 		if (animated)
 		{
 			srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+			srcRect.y = srcRect.h * animIndex;
 		}
-
-		srcRect.y = srcRect.h * animIndex;
 
 		desRect.x = static_cast<int>(transform->position.x);
 		desRect.y = static_cast<int>(transform->position.y);

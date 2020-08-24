@@ -67,10 +67,12 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	//map = new Map();
 
 	// ECS
-	Map::loadMap("Assets/map32_20_1.txt", 32, 20);
+	Map::loadMap("Assets/map.map", 25, 20);
 
+	SDL_Rect playerRect;
+	playerRect.x = playerRect.y = playerRect.w = playerRect.h = 0;
 	newPlayer.addComponent<TransformComponent>();
-	newPlayer.addComponent<SpriteComponent>("Assets/player_anims.png", true);
+	newPlayer.addComponent<SpriteComponent>("Assets/player_anims.png", true, playerRect);
 	newPlayer.addComponent<KeyboardController>();
 	newPlayer.addComponent<ColliderComponent>("player");
 	newPlayer.addGroup(groupPlayers);
