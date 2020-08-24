@@ -11,7 +11,7 @@ public:
 	SpriteComponent* sprite;
 
 	SDL_Rect tileRect;
-	SDL_Rect srcRect;
+	SDL_Rect _srcRect;
 	int tileID;
 	char* path;
 
@@ -29,9 +29,9 @@ public:
 
 		tileID = id;
 		path = _strdup("Assets/terrain_ss.png");
-		srcRect.h = srcRect.w = 32;
-		srcRect.y = id / 10 * 32;
-		srcRect.x = id % 10 * 32;
+		_srcRect.h = _srcRect.w = 32;
+		_srcRect.y = id / 10 * 32;
+		_srcRect.x = id % 10 * 32;
 		/*switch (tileID)
 		{
 		case 0:
@@ -56,10 +56,10 @@ public:
 
 	void init() override
 	{
-		entity->addComponent<TransformComponent>(tileRect.x, tileRect.y, tileRect.h, tileRect.w, 1);
+		entity->addComponent<TransformComponent>(tileRect.x, tileRect.y, tileRect.h, tileRect.w, 2);
 		transform = &entity->getComponent<TransformComponent>();
 
-		entity->addComponent<SpriteComponent>(path, false, srcRect);
+		entity->addComponent<SpriteComponent>(path, false, _srcRect);
 		sprite = &entity->getComponent<SpriteComponent>();
 	}
 };

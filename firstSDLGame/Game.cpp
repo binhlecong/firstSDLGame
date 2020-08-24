@@ -71,7 +71,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 
 	SDL_Rect playerRect;
 	playerRect.x = playerRect.y = playerRect.w = playerRect.h = 0;
-	newPlayer.addComponent<TransformComponent>();
+	newPlayer.addComponent<TransformComponent>(0.0f, 0.0f, 32, 32, 2);
 	newPlayer.addComponent<SpriteComponent>("Assets/player_anims.png", true, playerRect);
 	newPlayer.addComponent<KeyboardController>();
 	newPlayer.addComponent<ColliderComponent>("player");

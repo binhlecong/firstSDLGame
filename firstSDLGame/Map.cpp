@@ -33,7 +33,7 @@ void Map::loadMap(const std::string& path, int sizeX, int sizeY)
 
 		for (int x = 0; x < sizeX; x++)
 		{
-			Game::addTile(x * 32, y * 32, v[x]);
+			Game::addTile(x * 64, y * 64, v[x]);
 			std::cout << std::setfill('0') << std::setw(2) << v[x] << ' ';
 		}
 		std::cout << std::endl;
