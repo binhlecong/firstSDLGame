@@ -10,7 +10,7 @@
 
 class SpriteComponent : public Component
 {
-private:
+public:
 	SDL_Texture* texture;
 	SDL_Rect srcRect, desRect;
 	TransformComponent* transform;
@@ -18,8 +18,6 @@ private:
 	bool animated = false;
 	int frames = 0;
 	int speed = 100;
-
-public:
 	int animIndex = 0;
 
 	SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;

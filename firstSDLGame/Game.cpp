@@ -4,6 +4,8 @@
 #include "Components.h"
 #include "Collision.h"
 
+bool Game::isRunning = true;
+
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 std::vector<ColliderComponent*> Game::colliders;
@@ -20,10 +22,13 @@ enum groupLabels :std::size_t
 	groupColliders
 };
 
+auto& tiles(manager.getGroup(groupMap));
+auto& players(manager.getGroup(groupPlayers));
+auto& enemies(manager.getGroup(groupEnemies));
+
 Game::Game()
 {
 	count = 0;
-	isRunning = true;
 	window = nullptr;
 }
 
@@ -71,7 +76,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 
 	SDL_Rect playerRect;
 	playerRect.x = playerRect.y = playerRect.w = playerRect.h = 0;
-	newPlayer.addComponent<TransformComponent>(0.0f, 0.0f, 32, 32, 2);
+	newPlayer.addComponent<TransformComponent>(512.0f, 320.0f, 32, 32, 2);
 	newPlayer.addComponent<SpriteComponent>("Assets/player_anims.png", true, playerRect);
 	newPlayer.addComponent<KeyboardController>();
 	newPlayer.addComponent<ColliderComponent>("player");
@@ -97,6 +102,16 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 
+	Vector2D plVelocity = newPlayer.getComponent<TransformComponent>().velocity;
+	int plSpeed = newPlayer.getComponent<TransformComponent>().speed;
+
+	for (auto aTile : tiles)
+	{
+		aTile->getComponent<TileComponent>().sprite->desRect.x -= (plVelocity.x * plSpeed);
+		aTile->getComponent<TileComponent>().transform->position.x -= (plVelocity.x * plSpeed);
+		aTile->getComponent<TileComponent>().sprite->desRect.y -= (plVelocity.y * plSpeed);
+		aTile->getComponent<TileComponent>().transform->position.y -= (plVelocity.y * plSpeed);
+	}
 	// temporary test
 	/*for (auto cc : colliders)
 	{
@@ -108,10 +123,6 @@ void Game::update()
 		}
 	}*/
 }
-
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
 
 void Game::render()
 {
