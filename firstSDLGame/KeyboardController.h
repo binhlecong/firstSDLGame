@@ -8,8 +8,8 @@
 class KeyboardController : public Component
 {
 public:
-	TransformComponent* transform;
-	SpriteComponent* sprite;
+	TransformComponent* transform = NULL;
+	SpriteComponent* sprite = NULL;
 
 	void init() override
 	{
@@ -21,24 +21,21 @@ public:
 	{
 		if (Game::event.type == SDL_KEYDOWN)
 		{
+			sprite->Play("Walk");
 			switch (Game::event.key.keysym.sym)
 			{
 			case SDLK_w:
 				transform->velocity.y = -1;
-				sprite->Play("Walk");
 				break;
 			case SDLK_a:
 				transform->velocity.x = -1;
-				sprite->Play("Walk");
 				sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
 				break;
 			case SDLK_s:
 				transform->velocity.y = 1;
-				sprite->Play("Walk");
 				break;
 			case SDLK_d:
 				transform->velocity.x = 1;
-				sprite->Play("Walk");
 				break;
 			default:
 				break;
@@ -47,23 +44,20 @@ public:
 		else if (Game::event.type == SDL_KEYUP)
 		{
 			sprite->spriteFlip = SDL_FLIP_NONE;
+			sprite->Play("Idle");
 			switch (Game::event.key.keysym.sym)
 			{
 			case SDLK_w:
 				transform->velocity.y = 0;
-				sprite->Play("Idle");
 				break;
 			case SDLK_a:
 				transform->velocity.x = 0;
-				sprite->Play("Idle");
 				break;
 			case SDLK_s:
 				transform->velocity.y = 0;
-				sprite->Play("Idle");
 				break;
 			case SDLK_d:
 				transform->velocity.x = 0;
-				sprite->Play("Idle");
 				break;
 			default:
 				break;

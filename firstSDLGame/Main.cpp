@@ -27,10 +27,11 @@ int main(int argc, char* argv[])
 		frameTime = SDL_GetTicks() - frameStart;
 
 		// delay frame if needed
-		if (framedelay> frameTime)
+		if (framedelay > frameTime)
 		{
 			SDL_Delay(framedelay - frameTime);
 		}
+		else std::cout << "!!! FPS dropped" << std::endl;
 	}
 
 	game->clean();

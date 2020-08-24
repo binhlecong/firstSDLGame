@@ -96,7 +96,7 @@ void Game::update()
 	manager.update();
 
 	// temporary test
-	for (auto cc : colliders)
+	/*for (auto cc : colliders)
 	{
 		ColliderComponent playerCollComp = newPlayer.getComponent<ColliderComponent>();
 		if (Collision::AABB(playerCollComp, *cc) && cc != &playerCollComp)
@@ -104,7 +104,7 @@ void Game::update()
 			newPlayer.getComponent<TransformComponent>().velocity * (1);
 			std::cout << "hit" << std::endl;
 		}
-	}
+	}*/
 }
 
 auto& tiles(manager.getGroup(groupMap));
