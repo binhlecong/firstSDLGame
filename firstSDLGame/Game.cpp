@@ -5,6 +5,7 @@
 #include "Collision.h"
 
 bool Game::isRunning = true;
+SDL_Rect Game::camera = { 0, 0, 1024, 640 };
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -76,7 +77,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 
 	SDL_Rect playerRect;
 	playerRect.x = playerRect.y = playerRect.w = playerRect.h = 0;
-	newPlayer.addComponent<TransformComponent>(512.0f, 320.0f, 32, 32, 2);
+	newPlayer.addComponent<TransformComponent>(400.0f, 320.0f, 32, 32, 2);
 	newPlayer.addComponent<SpriteComponent>("Assets/player_anims.png", true, playerRect);
 	newPlayer.addComponent<KeyboardController>();
 	newPlayer.addComponent<ColliderComponent>("player");
@@ -102,16 +103,24 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 
-	Vector2D plVelocity = newPlayer.getComponent<TransformComponent>().velocity;
-	int plSpeed = newPlayer.getComponent<TransformComponent>().speed;
+	Vector2D plPosition = newPlayer.getComponent<TransformComponent>().position;
 
-	for (auto aTile : tiles)
+	// update the screen from which the camera will show
+	camera.x = plPosition.x - 512;
+	camera.y = plPosition.y - 320;
+	camera.x = std::max(0, camera.x);
+	camera.x = std::min(576, camera.x);
+	camera.y = std::max(0, camera.y);
+	camera.y = std::min(640, camera.y);
+
+	// not a efficient method
+	/*for (auto aTile : tiles)
 	{
 		aTile->getComponent<TileComponent>().sprite->desRect.x -= (plVelocity.x * plSpeed);
 		aTile->getComponent<TileComponent>().transform->position.x -= (plVelocity.x * plSpeed);
 		aTile->getComponent<TileComponent>().sprite->desRect.y -= (plVelocity.y * plSpeed);
 		aTile->getComponent<TileComponent>().transform->position.y -= (plVelocity.y * plSpeed);
-	}
+	}*/
 	// temporary test
 	/*for (auto cc : colliders)
 	{

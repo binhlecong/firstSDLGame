@@ -50,7 +50,7 @@ public:
 
 	void update() override
 	{
-		/*position.x += velocity.x * speed;
-		position.y += velocity.y * speed;*/
+		position.x += velocity.x * speed;
+		position.y += velocity.y * speed;
 	}
 };
