@@ -9,23 +9,16 @@ SDL_Rect Game::camera = { 0, 0, 1024, 640 };
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
-std::vector<ColliderComponent*> Game::colliders;
 
+Map* map;
 Manager manager;
 
 auto& newPlayer(manager.addEntity());
 
-enum groupLabels :std::size_t
-{
-	groupMap,
-	groupPlayers,
-	groupEnemies,
-	groupColliders
-};
-
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
+auto& tiles(manager.getGroup(Game::groupMap));
+auto& players(manager.getGroup(Game::groupPlayers));
+auto& enemies(manager.getGroup(Game::groupEnemies));
+auto& colliders(manager.getGroup(Game::groupColliders));
 
 Game::Game()
 {
@@ -70,10 +63,10 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 
-	//map = new Map();
+	map = new Map("Assets/terrain_ss.png", 2, 32);
 
 	// ECS
-	Map::loadMap("Assets/map.map", 25, 20);
+	map->loadMap("Assets/map.map", 25, 20);
 
 	SDL_Rect playerRect;
 	playerRect.x = playerRect.y = playerRect.w = playerRect.h = 0;
@@ -100,8 +93,22 @@ void Game::handleEvent()
 
 void Game::update()
 {
+	SDL_Rect playerCol = newPlayer.getComponent<ColliderComponent>().colliderRect;
+	// get the position of the player before update so that we can force him 
+	// back to that when collision occur.
+	Vector2D playerOldPos = newPlayer.getComponent<TransformComponent>().position;
+
 	manager.refresh();
 	manager.update();
+
+	for (auto& c : colliders)
+	{
+		SDL_Rect cCol = c->getComponent<ColliderComponent>().colliderRect;
+		if (Collision::AABB(playerCol, cCol))
+		{
+			newPlayer.getComponent<TransformComponent>().position = playerOldPos;
+		}
+	}
 
 	Vector2D plPosition = newPlayer.getComponent<TransformComponent>().position;
 
@@ -151,6 +158,11 @@ void Game::render()
 	{
 		e->draw();
 	}
+
+	/*for (auto& c : colliders)
+	{
+		c->draw();
+	}*/
 	// update the screen
 	SDL_RenderPresent(Game::renderer);
 }
@@ -161,11 +173,4 @@ void Game::clean()
 	SDL_DestroyRenderer(Game::renderer);
 	SDL_Quit();
 	std::cout << "<<< Game cleared. Finished! ..." << std::endl;
-}
-
-void Game::addTile(int x, int y, int id)
-{
-	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(x, y, 32, 32, id);
-	tile.addGroup(groupMap);
 }

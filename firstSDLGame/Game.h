@@ -24,12 +24,18 @@ public:
 	bool running() { return isRunning; }
 
 	// Only one game renderer, so we will declare it as static 
-	static void addTile(int x, int y, int id);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
-	static std::vector<ColliderComponent*> colliders;
 	static bool isRunning;
 	static SDL_Rect camera;
+
+	enum groupLabels : std::size_t
+	{
+		groupMap,
+		groupPlayers,
+		groupEnemies,
+		groupColliders
+	};
 
 private:
 	int count = 0;

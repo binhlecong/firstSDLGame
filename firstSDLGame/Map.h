@@ -6,9 +6,15 @@
 class Map
 {
 public:
-	Map();
+	Map(const char* mfp, int ms, int ts);
 	~Map();
 
-	static void loadMap(const std::string& path, int sizeX, int sizeY);
+	void loadMap(const std::string& path, int sizeX, int sizeY);
+	void addTile(int x, int y, int id);
+
+private:
+	const char* mapFilePath;
+	int mapScale;
+	int tileSize;
 };
 
